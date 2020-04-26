@@ -1,5 +1,8 @@
 import AES from 'crypto-js/aes';
 import Utf8 from 'crypto-js/enc-utf8';
+import { environment } from '../../environments/envi';
+import bcrypt from 'bcryptjs';
+// var bcrypt = require('bcryptjs');
 
 export class CriptografiaService {
 
@@ -15,9 +18,17 @@ export class CriptografiaService {
         return descripgrafado;
     }
 
-    gerarFraseSecreta(valor: string, data: Date) {
+    criptografarOneWay(valor: string) {
+        return bcrypt.hashSync(valor);
+    }
+
+    verificarCriptografiaOneWay(valor: string, hash: string) {
+        return bcrypt.compareSync(valor, hash);
+    }
+
+    private gerarFraseSecreta(valor: string, data: Date) {
         const dataNumbers = data.getTime();
-        return '!@#*&()ruhfuwefh!' + this.reverseString(valor) + dataNumbers + 'qwe123';
+        return environment.SECRET_PASS.PERFIX + this.reverseString(valor) + dataNumbers + environment.SECRET_PASS.SUFIX;
     }
 
     private reverseString(str: string) {

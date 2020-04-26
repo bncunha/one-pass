@@ -13,7 +13,8 @@ export class Usuario {
     nome: string;
 
     @Column({
-        nullable: false
+        nullable: false,
+        unique: true
     })
     login: string;
 
