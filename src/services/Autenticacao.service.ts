@@ -2,6 +2,8 @@ import { DefaultResponse } from "../value-objects/DefaultResponse";
 import { CriptografiaService } from "./Criptografia.service";
 import { UsuarioService } from "./Usuario.service";
 import { LoginResponseDTO } from "../value-objects/LoginResponseDTO";
+import jwt from "jsonwebtoken";
+import { environment } from "../../environments/envi";
 
 export class AutenticacaoService {
 
@@ -20,9 +22,10 @@ export class AutenticacaoService {
                 throw 'Login ou senha estão incorretos!';
             }
 
+            const token = jwt.sign({id: usuarioFinded.idUsuario}, environment.JWT_SECRET, {expiresIn: environment.JWT_EXPIRES});
             const loginResponse = new LoginResponseDTO();
             loginResponse.nome = usuarioFinded.nome;
-            loginResponse.token = '123';
+            loginResponse.token = token;
 
             return new DefaultResponse().success(res, loginResponse); 
         } catch(err) {
