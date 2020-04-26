@@ -10,8 +10,8 @@ export abstract class DefaultService<Model> {
         this.dao = dao;
     }
 
-    abstract async create(req: Request, res: Response): Promise<DefaultResponse>;
-    abstract async update(req: Request, res: Response): Promise<DefaultResponse>;
+    abstract async create(req: any, res: any): Promise<DefaultResponse>;
+    abstract async update(req: any, res: any): Promise<DefaultResponse>;
 
     async getPaginado(req: Request, res: Response) {
         try {

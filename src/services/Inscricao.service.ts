@@ -15,10 +15,17 @@ export class InscricaoService extends DefaultService<Inscricao> {
     }
 
     async create(req: Request, res: Response): Promise<DefaultResponse> {
-        const inscricaoDTO: InscricaoDTO = req.body;
-        const inscricao: Inscricao = Object.assign(new Inscricao(), req.body);
+        return this.saveInscricao(req, res, new Inscricao());
+    }
+    
+    async update(req: any, res: any): Promise<DefaultResponse> {
+        return this.saveInscricao(req, res, await this.dao.findById(req.params.id));
+    }
 
+    async saveInscricao(req: any, res: any, insc: Inscricao) {
+        const inscricao = Object.assign(insc, req.body);
         const dataCriptografia = new Date();
+        // TODO - pegar o nome do usuario
         const nomeUsuario = 'bruno';
         const secretHash = 'Qwe1!324E%%' + nomeUsuario + dataCriptografia.getTime();
         
@@ -27,14 +34,11 @@ export class InscricaoService extends DefaultService<Inscricao> {
         inscricao.site = this.criptografiaService.criptografarTwoWay(inscricao.site, secretHash, dataCriptografia);
         inscricao.login = this.criptografiaService.criptografarTwoWay(inscricao.login, secretHash, dataCriptografia);
         inscricao.senha = this.criptografiaService.criptografarTwoWay(inscricao.senha, secretHash, dataCriptografia);
+        // TODO - Acertar o nome do usuario
         inscricao.usuario = 1 as any;
 
         const inscricaoSaved = await this.dao.save(inscricao);
         return new DefaultResponse().success(res, inscricaoSaved);
-    }
-    
-    update(req: import("express").Request<import("express-serve-static-core").ParamsDictionary, any, any, import("express-serve-static-core").Query>, res: import("express").Response<any>): Promise<import("../value-objects/DefaultResponse").DefaultResponse> {
-        throw new Error("Method not implemented.");
     }
 
 }
