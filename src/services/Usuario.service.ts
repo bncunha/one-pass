@@ -33,4 +33,10 @@ export class UsuarioService extends DefaultService<Usuario> {
         }
     }
 
+    async findByLogin(login: string): Promise<Usuario> {
+        return await (await this.dao.findWithParams({
+            where: {login: login}
+        }))[0];
+    }
+
 }

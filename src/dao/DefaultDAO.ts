@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { getRepository, Repository, FindConditions } from "typeorm";
 
 export class DefaultDAO<Model> {
     
@@ -31,6 +31,10 @@ export class DefaultDAO<Model> {
     async deleteById(id: number) {
         const finded = await this.findById(id);
         return this.repository.remove(finded);
+    }
+
+    async findWithParams(params: any): Promise<Model[]> {
+        return await this.repository.find(params) as Model[];
     }
 
     get repository() {

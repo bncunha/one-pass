@@ -9,8 +9,8 @@ export class DefaultResponse {
         return this;
     }
 
-    error(res: Response, error: any) {
-        res.status(HttpStatus.BAD_REQUEST).json(error);
+    error(res: Response, error: any, httpStatus = HttpStatus.BAD_REQUEST) {
+        res.status(httpStatus).json(error);
         return this;
     }
 
